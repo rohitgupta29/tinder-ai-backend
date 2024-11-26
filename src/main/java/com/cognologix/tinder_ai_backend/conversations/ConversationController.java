@@ -4,9 +4,7 @@ package com.cognologix.tinder_ai_backend.conversations;
 import com.cognologix.tinder_ai_backend.profiles.ProfileRepository;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +35,39 @@ public class ConversationController {
 
         conversationRepository.save(conversation);
         return conversation;
+    }
+
+    @PostMapping("/conversations/{conversationId}")
+    public Conversation addMessageToConversation(
+            @PathVariable String conversationId,
+            ChatMessage chatMessage) {
+
+        // Verifying that the conversation exists
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Unable to find conversation with the ID " + conversationId
+                ));
+        // verifying that the author of that message exists
+        profileRepository.findById(conversationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                        "Unable to find conversation with the ID" + chatMessage.authorId()
+                ));
+
+        // TODO: Need to validate that the author of a message happes to be only the profile associated with the user.
+
+        // create a new message with time
+        ChatMessage messageWithTime = new ChatMessage(
+                chatMessage.messageText(),
+                chatMessage.authorId(),
+                LocalDateTime.now());
+
+        // add a check message to conversation
+        conversation.messages().add(chatMessage);
+        conversationRepository.save(conversation);
+        return conversation;
+
+
     }
 
 
