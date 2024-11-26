@@ -3,12 +3,13 @@ package com.cognologix.tinder_ai_backend;
 import com.cognologix.tinder_ai_backend.profiles.Gender;
 import com.cognologix.tinder_ai_backend.profiles.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.cognologix.tinder_ai_backend.profiles.Profile;
 
 @SpringBootApplication
-public class TinderAiBackendApplication {
+public class TinderAiBackendApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProfileRepository profileRepository;
