@@ -37,6 +37,16 @@ public class ConversationController {
         return conversation;
     }
 
+    @GetMapping("/conversations/{conversationId}")
+    public Conversation getConversation(
+            @PathVariable String conversationId) {
+        return conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Unable to find conversation with the ID " + conversationId
+                ));
+    }
+
     @PostMapping("/conversations/{conversationId}")
     public Conversation addMessageToConversation(
             @PathVariable String conversationId,
@@ -76,3 +86,6 @@ public class ConversationController {
     ){}
 
 }
+
+
+// revise 1:55:00 to practice API requests
