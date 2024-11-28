@@ -6,11 +6,16 @@ import com.cognologix.tinder_ai_backend.conversations.Conversation;
 import com.cognologix.tinder_ai_backend.conversations.ConversationRepository;
 import com.cognologix.tinder_ai_backend.profiles.Gender;
 import com.cognologix.tinder_ai_backend.profiles.ProfileRepository;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.cognologix.tinder_ai_backend.profiles.Profile;
+
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,12 +29,19 @@ public class TinderAiBackendApplication implements CommandLineRunner {
 	@Autowired
 	private ConversationRepository conversationRepository;
 
+	@Autowired
+	private OpenAiChatModel chatModel;
+
 	public static void main(String[] args) {
 
 		SpringApplication.run(TinderAiBackendApplication.class, args);
 	}
 
 	public void run(String... args) {
+
+		Prompt prompt = new Prompt("Who is Kaushik Kothagal?");
+		ChatResponse response = chatModel.call(prompt);
+		System.out.println(response.getResult().getOutput());
 
 		profileRepository.deleteAll();
 		conversationRepository.deleteAll();
