@@ -4,7 +4,9 @@ package com.cognologix.tinder_ai_backend;
 import com.cognologix.tinder_ai_backend.conversations.ChatMessage;
 import com.cognologix.tinder_ai_backend.conversations.Conversation;
 import com.cognologix.tinder_ai_backend.conversations.ConversationRepository;
+import com.cognologix.tinder_ai_backend.matches.MatchRepository;
 import com.cognologix.tinder_ai_backend.profiles.Gender;
+import com.cognologix.tinder_ai_backend.profiles.ProfileCreationService;
 import com.cognologix.tinder_ai_backend.profiles.ProfileRepository;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -30,6 +32,12 @@ public class TinderAiBackendApplication implements CommandLineRunner {
 	private ConversationRepository conversationRepository;
 
 	@Autowired
+	private MatchRepository matchRepository;
+
+	@Autowired
+	private ProfileCreationService profileCreationService;
+
+	@Autowired
 	private OpenAiChatModel chatModel;
 
 	public static void main(String[] args) {
@@ -38,6 +46,8 @@ public class TinderAiBackendApplication implements CommandLineRunner {
 	}
 
 	public void run(String... args) {
+
+		profileCreationService.saveProfilesToDB();
 
 		Prompt prompt = new Prompt("Who is Kaushik Kothagal?");
 		ChatResponse response = chatModel.call(prompt);
